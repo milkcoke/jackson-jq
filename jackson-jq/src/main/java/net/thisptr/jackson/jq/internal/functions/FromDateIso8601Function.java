@@ -21,6 +21,10 @@ public class FromDateIso8601Function implements Function {
         Preconditions.checkInputType("fromdateiso8601", in, JsonNodeType.STRING);
         try {
             String iso8601String = in.asText();
+            // In future versions of JQ, it may need to be revisited due to fractional support: https://github.com/jqlang/jq/issues/1409
+            if (iso8601String.length() > 20) {
+                throw new JsonQueryException(String.format("fromdateiso8601: date \"%s\" does not match format \"%%Y-%%m-%%dT%%H:%%M:%%SZ\"", iso8601String));
+            }
             long epochSeconds = Instant.parse(iso8601String).getEpochSecond();
             output.emit(JsonNodeUtils.asNumericNode(epochSeconds), null);
         } catch (DateTimeParseException e) {
