@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.NullNode;
 
 import net.thisptr.jackson.jq.Expression;
 import net.thisptr.jackson.jq.PathOutput;
@@ -38,7 +39,7 @@ public class ComplexAssignment extends BinaryOperatorExpression {
 			}, true);
 			JsonNode out = in;
 			for (final Path lpath : lpaths)
-				out = lpath.mutate(out, (lval) -> operator.apply(scope.getObjectMapper(), lval, rval));
+				out = lpath.mutate(out, (lval) -> operator.apply(scope.getObjectMapper(), lval == null ? NullNode.getInstance() : lval, rval));
 			output.emit(out, null);
 		});
 	}
