@@ -1,4 +1,9 @@
-- q: 'fromdateiso8601(.)'
+- q: 'fromdateiso8601'
   in: "2023-09-30T00:00:00Z"
   out:
   - 1696032000
+
+- q: 'try fromdateiso8601 catch .'
+  in: "2023-09-30T00:00:00.000Z"
+  out:
+  - "date \"2023-09-30T00:00:00.000Z\" does not match format \"%Y-%m-%dT%H:%M:%SZ\""
