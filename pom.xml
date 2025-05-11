@@ -4,7 +4,7 @@
 	<groupId>net.thisptr</groupId>
 	<artifactId>jackson-jq-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>1.2.0</version>
+	<version>1.3.0</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>jq for Jackson JSON Processor</description>
 	<url>https://github.com/eiiches/jackson-jq</url>
@@ -28,7 +28,7 @@
 		<connection>scm:git:git@github.com:eiiches/jackson-jq.git</connection>
 		<developerConnection>scm:git:git@github.com:eiiches/jackson-jq.git</developerConnection>
 		<url>git@github.com:juven/git-demo.git</url>
-		<tag>1.2.0</tag>
+		<tag>1.3.0</tag>
 	</scm>
 
 	<modules>
@@ -46,8 +46,8 @@
 
 
 	<properties>
-		<org.slf4j-version>2.0.16</org.slf4j-version>
-		<com.fasterxml.jackson-version>2.18.2</com.fasterxml.jackson-version>
+		<org.slf4j-version>2.0.17</org.slf4j-version>
+		<com.fasterxml.jackson-version>2.19.0</com.fasterxml.jackson-version>
 		<com.google.auto.service-version>1.1.1</com.google.auto.service-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -64,7 +64,7 @@
 			<dependency>
 				<groupId>org.junit</groupId>
 				<artifactId>junit-bom</artifactId>
-				<version>5.11.3</version>
+				<version>5.12.2</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -94,7 +94,7 @@
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
-			<version>3.26.3</version>
+			<version>3.27.3</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -205,7 +205,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>3.5.2</version>
+					<version>3.5.3</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -235,27 +235,27 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.13.0</version>
+					<version>3.14.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-deploy-plugin</artifactId>
-					<version>3.1.3</version>
+					<version>3.1.4</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-install-plugin</artifactId>
-					<version>3.1.3</version>
+					<version>3.1.4</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-clean-plugin</artifactId>
-					<version>3.4.0</version>
+					<version>3.4.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
-					<version>0.8.12</version>
+					<version>0.8.13</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -280,7 +280,7 @@
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>javacc-maven-plugin</artifactId>
-					<version>3.1.0</version>
+					<version>3.1.1</version>
 					<dependencies>
 						<dependency>
 							<groupId>net.java.dev.javacc</groupId>

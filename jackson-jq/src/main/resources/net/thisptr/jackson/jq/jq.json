@@ -102,6 +102,7 @@
 		{"name": "combinations", "args": ["n"], "body": ". as $dot | [range(n) | $dot] | combinations"},
 		{"name": "map_values", "args": ["f"], "body": ".[] |= f"},
 		{"name": "_modify", "args": ["paths", "update"], "body": "reduce path(paths) as $p (.; label $out | (setpath($p; getpath($p) | update) | ., break $out), delpaths([$p]))", "version": "[1.6, )"},
-		{"name": "_modify", "args": ["paths", "update"], "body": "reduce path(paths) as $p (.; setpath($p; getpath($p) | update))", "version": "[, 1.6)"}
+		{"name": "_modify", "args": ["paths", "update"], "body": "reduce path(paths) as $p (.; setpath($p; getpath($p) | update))", "version": "[, 1.6)"},
+		{"name": "pick", "args": ["pathexps"], "body": ". as $in | reduce path(pathexps) as $a (null; setpath($a; $in|getpath($a)) )", "version": "[1.7, )"}
 	]
 }
