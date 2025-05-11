@@ -46,8 +46,8 @@
 
 
 	<properties>
-		<org.slf4j-version>2.0.16</org.slf4j-version>
-		<com.fasterxml.jackson-version>2.18.2</com.fasterxml.jackson-version>
+		<org.slf4j-version>2.0.17</org.slf4j-version>
+		<com.fasterxml.jackson-version>2.19.0</com.fasterxml.jackson-version>
 		<com.google.auto.service-version>1.1.1</com.google.auto.service-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -64,7 +64,7 @@
 			<dependency>
 				<groupId>org.junit</groupId>
 				<artifactId>junit-bom</artifactId>
-				<version>5.11.3</version>
+				<version>5.12.2</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -94,7 +94,7 @@
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
-			<version>3.26.3</version>
+			<version>3.27.3</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
