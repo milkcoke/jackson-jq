@@ -46,7 +46,7 @@
 
 	<properties>
 		<org.slf4j-version>2.0.17</org.slf4j-version>
-		<com.fasterxml.jackson-version>2.19.0</com.fasterxml.jackson-version>
+		<com.fasterxml.jackson-version>2.19.2</com.fasterxml.jackson-version>
 		<com.google.auto.service-version>1.1.1</com.google.auto.service-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -63,7 +63,7 @@
 			<dependency>
 				<groupId>org.junit</groupId>
 				<artifactId>junit-bom</artifactId>
-				<version>5.12.2</version>
+				<version>5.13.4</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -219,7 +219,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-enforcer-plugin</artifactId>
-					<version>3.5.0</version>
+					<version>3.6.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.felix</groupId>
@@ -249,7 +249,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-clean-plugin</artifactId>
-					<version>3.4.1</version>
+					<version>3.5.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.jacoco</groupId>
@@ -296,7 +296,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-gpg-plugin</artifactId>
-					<version>3.2.7</version>
+					<version>3.2.8</version>
 				</plugin>
 				<plugin>
 					<groupId>org.jboss.jandex</groupId>
