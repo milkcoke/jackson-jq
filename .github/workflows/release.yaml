@@ -60,6 +60,8 @@ jobs:
         gpg --list-secret-keys
 
     - name: Build & Deploy
+      env:
+        MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
       run: |
         set -euo pipefail
         git checkout master/1.x

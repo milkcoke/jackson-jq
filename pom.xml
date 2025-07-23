@@ -27,7 +27,7 @@
 	<scm>
 		<connection>scm:git:git@github.com:eiiches/jackson-jq.git</connection>
 		<developerConnection>scm:git:git@github.com:eiiches/jackson-jq.git</developerConnection>
-		<url>git@github.com:juven/git-demo.git</url>
+		<url>git@github.com:eiiches/jackson-jq.git</url>
 		<tag>HEAD</tag>
 	</scm>
 
@@ -39,11 +39,10 @@
 
 	<distributionManagement>
 		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<id>central</id>
+			<url>https://central.sonatype.com/repository/maven-snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-
 
 	<properties>
 		<org.slf4j-version>2.0.17</org.slf4j-version>
@@ -290,9 +289,9 @@
 					</dependencies>
 				</plugin>
 				<plugin>
-					<groupId>org.sonatype.plugins</groupId>
-					<artifactId>nexus-staging-maven-plugin</artifactId>
-					<version>1.7.0</version>
+					<groupId>org.sonatype.central</groupId>
+					<artifactId>central-publishing-maven-plugin</artifactId>
+					<version>0.8.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -327,13 +326,12 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.sonatype.plugins</groupId>
-						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<groupId>org.sonatype.central</groupId>
+						<artifactId>central-publishing-maven-plugin</artifactId>
 						<extensions>true</extensions>
 						<configuration>
-							<serverId>ossrh</serverId>
-							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-							<autoReleaseAfterClose>false</autoReleaseAfterClose>
+							<publishingServerId>central</publishingServerId>
+							<autoPublish>false</autoPublish>
 						</configuration>
 					</plugin>
 				</plugins>
