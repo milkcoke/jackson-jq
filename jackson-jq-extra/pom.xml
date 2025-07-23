@@ -8,14 +8,14 @@
 	<parent>
 		<groupId>net.thisptr</groupId>
 		<artifactId>jackson-jq-parent</artifactId>
-		<version>1.3.0</version>
+		<version>1.4.0</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
 			<groupId>net.thisptr</groupId>
 			<artifactId>jackson-jq</artifactId>
-			<version>1.3.0</version>
+			<version>1.4.0</version>
 		</dependency>
 	</dependencies>
 
@@ -28,6 +28,11 @@
 					<instructions>
 						<Include-Resource>META-INF/services/net.thisptr.jackson.jq.Function=${project.build.outputDirectory}/META-INF/services/net.thisptr.jackson.jq.Function,META-INF/services/net.thisptr.jackson.jq.module.Module=${project.build.outputDirectory}/META-INF/services/net.thisptr.jackson.jq.module.Module,META-INF/jandex.idx=${project.build.outputDirectory}/META-INF/jandex.idx</Include-Resource>
 					</instructions>
+					<archive>
+						<manifestEntries>
+							<Automatic-Module-Name>net.thisptr.jackson.jq.extra</Automatic-Module-Name>
+						</manifestEntries>
+					</archive>
 				</configuration>
 			</plugin>
 			<plugin>
