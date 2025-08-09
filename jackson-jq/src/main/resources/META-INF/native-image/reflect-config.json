@@ -1,0 +1,57 @@
+[
+  {
+    "name": "net.thisptr.jackson.jq.internal.JqJson",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ],
+    "fields": [
+      {
+        "name": "functions"
+      }
+    ],
+    "condition": {
+      "typeReachable": "net.thisptr.jackson.jq.BuiltinFunctionLoader"
+    }
+  },
+  {
+    "name": "net.thisptr.jackson.jq.internal.JqJson$JqFuncDef",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ],
+    "fields": [
+      {
+        "name": "name"
+      },
+      {
+        "name": "args"
+      },
+      {
+        "name": "body"
+      },
+      {
+        "name": "version"
+      }
+    ],
+    "condition": {
+      "typeReachable": "net.thisptr.jackson.jq.internal.JqJson"
+    }
+  },
+  {
+    "name": "net.thisptr.jackson.jq.internal.misc.VersionRangeDeserializer",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ],
+    "condition": {
+      "typeReachable": "net.thisptr.jackson.jq.internal.JqJson$JqFuncDef"
+    }
+  }
+]

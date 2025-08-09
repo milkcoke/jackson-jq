@@ -1,12 +1,10 @@
 package net.thisptr.jackson.jq.internal.tree.binaryop;
 
-import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-
 import net.thisptr.jackson.jq.Expression;
 import net.thisptr.jackson.jq.Version;
 import net.thisptr.jackson.jq.internal.tree.binaryop.BinaryOperatorExpression.Operator.Associativity;
@@ -42,62 +40,41 @@ public abstract class BinaryOperatorExpression implements Expression {
 	}
 
 	public enum Operator {
-		ASSIGN("=", 6, Associativity.RIGHT, Assignment.class),
-		UDPATE("|=", 6, Associativity.RIGHT, UpdateAssignment.class),
-		DEFAULT_EQUAL("//=", 6, Associativity.RIGHT, ComplexAlternativeAssignment.class),
-		PLUS_EQUAL("+=", 6, Associativity.RIGHT, ComplexPlusAssignment.class),
-		MINUS_EQUAL("-=", 6, Associativity.RIGHT, ComplexMinusAssignment.class),
-		TIMES_EQUAL("*=", 6, Associativity.RIGHT, ComplexMultiplyAssignment.class),
-		DIVIDE_EQUAL("/=", 6, Associativity.RIGHT, ComplexDivideAssignment.class),
-		MODULO_EQUAL("%=", 6, Associativity.RIGHT, ComplexModuloAssignment.class),
-		DEFAULT("//", 5, Associativity.LEFT, AlternativeOperatorExpression.class),
-		OR("or", 4, Associativity.LEFT, BooleanOrExpression.class),
-		AND("and", 4, Associativity.LEFT, BooleanAndExpression.class),
-		LESS_EQUAL("<=", 3, Associativity.LEFT, CompareLessEqualTest.class),
-		LESS("<", 3, Associativity.LEFT, CompareLessTest.class),
-		GREATER_EQUAL(">=", 3, Associativity.LEFT, CompareGreaterEqualTest.class),
-		GREATER(">", 3, Associativity.LEFT, CompareGreaterTest.class),
-		EQUAL("==", 3, Associativity.LEFT, CompareEqualTest.class),
-		NOT_EQUAL("!=", 3, Associativity.LEFT, CompareNotEqualTest.class),
-		PLUS("+", 2, Associativity.LEFT, PlusExpression.class),
-		MINUS("-", 2, Associativity.LEFT, MinusExpression.class),
-		MODULO("%", 1, Associativity.LEFT, ModuloExpression.class),
-		DIVIDE("/", 1, Associativity.LEFT, DivideExpression.class),
-		TIMES("*", 1, Associativity.LEFT, MultiplyExpression.class);
+		ASSIGN("=", 6, Associativity.RIGHT),
+		UDPATE("|=", 6, Associativity.RIGHT),
+		DEFAULT_EQUAL("//=", 6, Associativity.RIGHT),
+		PLUS_EQUAL("+=", 6, Associativity.RIGHT),
+		MINUS_EQUAL("-=", 6, Associativity.RIGHT),
+		TIMES_EQUAL("*=", 6, Associativity.RIGHT),
+		DIVIDE_EQUAL("/=", 6, Associativity.RIGHT),
+		MODULO_EQUAL("%=", 6, Associativity.RIGHT),
+		DEFAULT("//", 5, Associativity.LEFT),
+		OR("or", 4, Associativity.LEFT),
+		AND("and", 4, Associativity.LEFT),
+		LESS_EQUAL("<=", 3, Associativity.LEFT),
+		LESS("<", 3, Associativity.LEFT),
+		GREATER_EQUAL(">=", 3, Associativity.LEFT),
+		GREATER(">", 3, Associativity.LEFT),
+		EQUAL("==", 3, Associativity.LEFT),
+		NOT_EQUAL("!=", 3, Associativity.LEFT),
+		PLUS("+", 2, Associativity.LEFT),
+		MINUS("-", 2, Associativity.LEFT),
+		MODULO("%", 1, Associativity.LEFT),
+		DIVIDE("/", 1, Associativity.LEFT),
+		TIMES("*", 1, Associativity.LEFT);
 
 		public final String image;
 		public final int precedence;
 		public final Associativity associativity;
-		public final Class<? extends BinaryOperatorExpression> clazz;
-		public final Constructor<? extends BinaryOperatorExpression> constructor;
-		public final boolean versionAware;
 
 		public enum Associativity {
 			LEFT, RIGHT
 		}
 
-		private Operator(final String image, final int precedence, final Associativity associativity, final Class<? extends BinaryOperatorExpression> clazz) {
+		private Operator(final String image, final int precedence, final Associativity associativity) {
 			this.image = image;
 			this.precedence = precedence;
 			this.associativity = associativity;
-			this.clazz = clazz;
-
-			Constructor<? extends BinaryOperatorExpression> ctor;
-			boolean versionAware;
-			try {
-				try {
-					ctor = clazz.getConstructor(Expression.class, Expression.class, Version.class);
-					versionAware = true;
-				} catch (NoSuchMethodException e) {
-					ctor = clazz.getConstructor(Expression.class, Expression.class);
-					versionAware = false;
-				}
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-
-			this.constructor = ctor;
-			this.versionAware = versionAware;
 		}
 
 		public static Operator fromImage(final String image) {
@@ -107,7 +84,7 @@ public abstract class BinaryOperatorExpression implements Expression {
 			return op;
 		}
 
-		private static Map<String, Operator> lookup = new HashMap<>();
+		private static final Map<String, Operator> lookup = new HashMap<>();
 		static {
 			for (final Operator op : Operator.values())
 				lookup.put(op.image, op);
@@ -115,9 +92,54 @@ public abstract class BinaryOperatorExpression implements Expression {
 
 		public Expression buildTree(final Expression lhs, final Expression rhs, final Version version) {
 			try {
-				if (versionAware)
-					return constructor.newInstance(lhs, rhs, version);
-				return constructor.newInstance(lhs, rhs);
+                switch (this) {
+                    case ASSIGN:
+                        return new Assignment(lhs, rhs);
+                    case UDPATE:
+                        return new UpdateAssignment(lhs, rhs, version);
+                    case DEFAULT_EQUAL:
+                        return new ComplexAlternativeAssignment(lhs, rhs);
+                    case PLUS_EQUAL:
+                        return new ComplexPlusAssignment(lhs, rhs);
+                    case MINUS_EQUAL:
+                        return new ComplexMinusAssignment(lhs, rhs);
+                    case TIMES_EQUAL:
+                        return new ComplexMultiplyAssignment(lhs, rhs);
+                    case DIVIDE_EQUAL:
+                        return new ComplexDivideAssignment(lhs, rhs);
+                    case MODULO_EQUAL:
+                        return new ComplexModuloAssignment(lhs, rhs);
+                    case DEFAULT:
+                        return new AlternativeOperatorExpression(lhs, rhs);
+                    case OR:
+                        return new BooleanOrExpression(lhs, rhs);
+                    case AND:
+                        return new BooleanAndExpression(lhs, rhs);
+                    case LESS_EQUAL:
+                        return new CompareLessEqualTest(lhs, rhs);
+                    case LESS:
+                        return new CompareLessTest(lhs, rhs);
+                    case GREATER_EQUAL:
+                        return new CompareGreaterEqualTest(lhs, rhs);
+                    case GREATER:
+                        return new CompareGreaterTest(lhs, rhs);
+                    case EQUAL:
+                        return new CompareEqualTest(lhs, rhs);
+                    case NOT_EQUAL:
+                        return new CompareNotEqualTest(lhs, rhs);
+                    case PLUS:
+                        return new PlusExpression(lhs, rhs);
+                    case MINUS:
+                        return new MinusExpression(lhs, rhs);
+                    case MODULO:
+                        return new ModuloExpression(lhs, rhs);
+                    case DIVIDE:
+                        return new DivideExpression(lhs, rhs);
+                    case TIMES:
+                        return new MultiplyExpression(lhs, rhs);
+                    default:
+                        throw new IllegalStateException("Unknown operator: " + this);
+                }
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
