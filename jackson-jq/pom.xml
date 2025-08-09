@@ -74,7 +74,8 @@
 							META-INF/services/net.thisptr.jackson.jq.Function=${project.build.outputDirectory}/META-INF/services/net.thisptr.jackson.jq.Function,
 							META-INF/jandex.idx=${project.build.outputDirectory}/META-INF/jandex.idx,
 							META-INF/native-image/resource-config.json=${project.build.outputDirectory}/META-INF/native-image/resource-config.json,
-							META-INF/native-image/reflect-config.json=${project.build.outputDirectory}/META-INF/native-image/reflect-config.json
+							META-INF/native-image/reflect-config.json=${project.build.outputDirectory}/META-INF/native-image/reflect-config.json,
+                            META-INF/native-image/native-image.properties=${project.build.outputDirectory}/META-INF/native-image/native-image.properties
 						</Include-Resource>
 					</instructions>
 					<archive>
