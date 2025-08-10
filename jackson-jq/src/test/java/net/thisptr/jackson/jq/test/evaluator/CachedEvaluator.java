@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.function.Supplier;
 
-import org.fusesource.leveldbjni.JniDBFactory;
-import org.iq80.leveldb.DB;
-import org.iq80.leveldb.Options;
+import org.rocksdb.Options;
+import org.rocksdb.RocksDB;
+import org.rocksdb.RocksDBException;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -24,7 +24,7 @@ import net.thisptr.jackson.jq.Version;
  * Note that type of {@link Result#error} is not preserved when cached. Don't use <tt>instanceof</tt> or <tt>getClass()</tt> on the field.
  */
 public class CachedEvaluator implements AutoCloseable, Evaluator {
-	private final DB db;
+	private final RocksDB db;
 	private final Evaluator evaluator;
 
 	public CachedEvaluator(final Evaluator evaluator, final String path) {
@@ -34,10 +34,10 @@ public class CachedEvaluator implements AutoCloseable, Evaluator {
 	public CachedEvaluator(final Evaluator evaluator, final File path) {
 		this.evaluator = evaluator;
 		final Options options = new Options();
-		options.createIfMissing(true);
+		options.setCreateIfMissing(true);
 		try {
-			this.db = JniDBFactory.factory.open(path, options);
-		} catch (final Exception e) {
+			this.db = RocksDB.open(options, path.getAbsolutePath());
+		} catch (final RocksDBException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -90,7 +90,7 @@ public class CachedEvaluator implements AutoCloseable, Evaluator {
 					value.error = "null";
 			}
 			db.put(key, MAPPER.writeValueAsBytes(value));
-		} catch (IOException e) {
+		} catch (IOException | RocksDBException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -103,7 +103,7 @@ public class CachedEvaluator implements AutoCloseable, Evaluator {
 				return null;
 			final CachedEvaluator.Value value = MAPPER.readValue(bytes, CachedEvaluator.Value.class);
 			return new Result(value.out, value.error != null ? new RuntimeException(value.error) : null);
-		} catch (final IOException e) {
+		} catch (final IOException | RocksDBException e) {
 			throw new RuntimeException(e);
 		}
 	}
