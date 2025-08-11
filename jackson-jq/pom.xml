@@ -44,6 +44,44 @@
 		</dependency>
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>native</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.graalvm.buildtools</groupId>
+						<artifactId>native-maven-plugin</artifactId>
+						<version>0.11.0</version>
+						<extensions>true</extensions>
+						<executions>
+							<execution>
+								<id>test-native</id>
+								<goals>
+									<goal>generateTestResourceConfig</goal>
+									<goal>test</goal>
+								</goals>
+								<phase>test</phase>
+								<configuration>
+									<resourceIncludedPatterns>
+										<pattern>classpath_modules(/.*\.(jq|json))?</pattern>
+										<pattern>tests(/.*\.ya?ml)?</pattern>
+										<pattern>failing_tests(/.*\.ya?ml)?</pattern>
+										<pattern>jq-test-extra-ok.json</pattern>
+										<pattern>librocksdbjni-.*.(so|jnilib|dll)</pattern>
+									</resourceIncludedPatterns>
+								</configuration>
+							</execution>
+						</executions>
+						<configuration>
+							<fallback>false</fallback>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -75,7 +113,7 @@
 							META-INF/jandex.idx=${project.build.outputDirectory}/META-INF/jandex.idx,
 							META-INF/native-image/resource-config.json=${project.build.outputDirectory}/META-INF/native-image/resource-config.json,
 							META-INF/native-image/reflect-config.json=${project.build.outputDirectory}/META-INF/native-image/reflect-config.json,
-                            META-INF/native-image/native-image.properties=${project.build.outputDirectory}/META-INF/native-image/native-image.properties
+							META-INF/native-image/native-image.properties=${project.build.outputDirectory}/META-INF/native-image/native-image.properties
 						</Include-Resource>
 					</instructions>
 					<archive>

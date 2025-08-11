@@ -40,144 +40,153 @@ public abstract class BinaryOperatorExpression implements Expression {
 	}
 
 	public enum Operator {
-        ASSIGN("=", 6, Associativity.RIGHT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new Assignment(lhs, rhs);
-            }
-        },
-        UDPATE("|=", 6, Associativity.RIGHT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new UpdateAssignment(lhs, rhs, version);
-            }
-        },
-        DEFAULT_EQUAL("//=", 6, Associativity.RIGHT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new ComplexAlternativeAssignment(lhs, rhs);
-            }
-        },
-        PLUS_EQUAL("+=", 6, Associativity.RIGHT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new ComplexPlusAssignment(lhs, rhs);
-            }
-        },
-        MINUS_EQUAL("-=", 6, Associativity.RIGHT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new ComplexMinusAssignment(lhs, rhs);
-            }
-        },
-        TIMES_EQUAL("*=", 6, Associativity.RIGHT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new ComplexMultiplyAssignment(lhs, rhs);
-            }
-        },
-        DIVIDE_EQUAL("/=", 6, Associativity.RIGHT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new ComplexDivideAssignment(lhs, rhs);
-            }
-        },
-        MODULO_EQUAL("%=", 6, Associativity.RIGHT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new ComplexModuloAssignment(lhs, rhs);
-            }
-        },
-        DEFAULT("//", 5, Associativity.LEFT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new AlternativeOperatorExpression(lhs, rhs);
-            }
-        },
-        OR("or", 4, Associativity.LEFT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new BooleanOrExpression(lhs, rhs);
-            }
-        },
-        AND("and", 4, Associativity.LEFT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new BooleanAndExpression(lhs, rhs);
-            }
-        },
-        LESS_EQUAL("<=", 3, Associativity.LEFT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new CompareLessEqualTest(lhs, rhs);
-            }
-        },
-        LESS("<", 3, Associativity.LEFT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new CompareLessTest(lhs, rhs);
-            }
-        },
-        GREATER_EQUAL(">=", 3, Associativity.LEFT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new CompareGreaterEqualTest(lhs, rhs);
-            }
-        },
-        GREATER(">", 3, Associativity.LEFT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new CompareGreaterTest(lhs, rhs);
-            }
-        },
-        EQUAL("==", 3, Associativity.LEFT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new CompareEqualTest(lhs, rhs);
-            }
-        },
-        NOT_EQUAL("!=", 3, Associativity.LEFT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new CompareNotEqualTest(lhs, rhs);
-            }
-        },
-        PLUS("+", 2, Associativity.LEFT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new PlusExpression(lhs, rhs);
-            }
-        },
-        MINUS("-", 2, Associativity.LEFT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new MinusExpression(lhs, rhs);
-            }
-        },
-        MODULO("%", 1, Associativity.LEFT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new ModuloExpression(lhs, rhs);
-            }
-        },
-        DIVIDE("/", 1, Associativity.LEFT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new DivideExpression(lhs, rhs);
-            }
-        },
-        TIMES("*", 1, Associativity.LEFT) {
-            @Override
-            protected Expression create(Expression lhs, Expression rhs, Version version) {
-                return new MultiplyExpression(lhs, rhs);
-            }
-        };
+		ASSIGN("=", 6, Associativity.RIGHT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new Assignment(lhs, rhs);
+			}
+		},
+		UDPATE("|=", 6, Associativity.RIGHT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new UpdateAssignment(lhs, rhs, version);
+			}
+		},
+		DEFAULT_EQUAL("//=", 6, Associativity.RIGHT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new ComplexAlternativeAssignment(lhs, rhs);
+			}
+		},
+		PLUS_EQUAL("+=", 6, Associativity.RIGHT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new ComplexPlusAssignment(lhs, rhs);
+			}
+		},
+		MINUS_EQUAL("-=", 6, Associativity.RIGHT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new ComplexMinusAssignment(lhs, rhs);
+			}
+		},
+		TIMES_EQUAL("*=", 6, Associativity.RIGHT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new ComplexMultiplyAssignment(lhs, rhs);
+			}
+		},
+		DIVIDE_EQUAL("/=", 6, Associativity.RIGHT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new ComplexDivideAssignment(lhs, rhs);
+			}
+		},
+		MODULO_EQUAL("%=", 6, Associativity.RIGHT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new ComplexModuloAssignment(lhs, rhs);
+			}
+		},
+		DEFAULT("//", 5, Associativity.LEFT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new AlternativeOperatorExpression(lhs, rhs);
+			}
+		},
+		OR("or", 4, Associativity.LEFT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new BooleanOrExpression(lhs, rhs);
+			}
+		},
+		AND("and", 4, Associativity.LEFT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new BooleanAndExpression(lhs, rhs);
+			}
+		},
+		LESS_EQUAL("<=", 3, Associativity.LEFT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new CompareLessEqualTest(lhs, rhs);
+			}
+		},
+		LESS("<", 3, Associativity.LEFT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new CompareLessTest(lhs, rhs);
+			}
+		},
+		GREATER_EQUAL(">=", 3, Associativity.LEFT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new CompareGreaterEqualTest(lhs, rhs);
+			}
+		},
+		GREATER(">", 3, Associativity.LEFT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new CompareGreaterTest(lhs, rhs);
+			}
+		},
+		EQUAL("==", 3, Associativity.LEFT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new CompareEqualTest(lhs, rhs);
+			}
+		},
+		NOT_EQUAL("!=", 3, Associativity.LEFT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new CompareNotEqualTest(lhs, rhs);
+			}
+		},
+		PLUS("+", 2, Associativity.LEFT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new PlusExpression(lhs, rhs);
+			}
+		},
+		MINUS("-", 2, Associativity.LEFT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new MinusExpression(lhs, rhs);
+			}
+		},
+		MODULO("%", 1, Associativity.LEFT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new ModuloExpression(lhs, rhs);
+			}
+		},
+		DIVIDE("/", 1, Associativity.LEFT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new DivideExpression(lhs, rhs);
+			}
+		},
+		TIMES("*", 1, Associativity.LEFT) {
+			@Override
+			protected Expression create(Expression lhs, Expression rhs, Version version) {
+				return new MultiplyExpression(lhs, rhs);
+			}
+		};
 
 		public final String image;
 		public final int precedence;
 		public final Associativity associativity;
 
-        protected abstract Expression create(Expression lhs, Expression rhs,  Version version);
+		/**
+		 * Creates a new {@link Expression} instance based on the provided left-hand side (lhs) expression,
+		 * right-hand side (rhs) expression, and the specified version.
+		 *
+		 * @param lhs the left-hand side expression
+		 * @param rhs the right-hand side expression
+		 * @param version the version providing contextual information for the expression creation
+		 * @return a new instance of {@link Expression} that represents the operation between the lhs and rhs expressions
+		 */
+		protected abstract Expression create(Expression lhs, Expression rhs, Version version);
 
 		public enum Associativity {
 			LEFT, RIGHT
@@ -204,7 +213,7 @@ public abstract class BinaryOperatorExpression implements Expression {
 
 		public Expression buildTree(final Expression lhs, final Expression rhs, final Version version) {
 			try {
-                return create(lhs, rhs, version);
+				return create(lhs, rhs, version);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}

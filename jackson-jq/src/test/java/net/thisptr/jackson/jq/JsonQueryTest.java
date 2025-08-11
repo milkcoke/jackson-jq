@@ -4,21 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Stream;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -29,15 +14,27 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import com.google.common.reflect.ClassPath;
-import com.google.common.reflect.ClassPath.ResourceInfo;
-
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 import net.thisptr.jackson.jq.exception.JsonQueryException;
 import net.thisptr.jackson.jq.internal.misc.VersionRangeDeserializer;
 import net.thisptr.jackson.jq.test.evaluator.CachedEvaluator;
 import net.thisptr.jackson.jq.test.evaluator.Evaluator;
 import net.thisptr.jackson.jq.test.evaluator.Evaluator.Result;
 import net.thisptr.jackson.jq.test.evaluator.TrueJqEvaluator;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 public class JsonQueryTest {
 	private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
@@ -84,9 +81,10 @@ public class JsonQueryTest {
 		}
 	}
 
-	private static List<TestCase> loadTestCases(final ClassLoader classLoader, final String resourceName, final boolean failing) throws Throwable {
+	private static List<TestCase> loadTestCases(final Path path, final boolean failing) throws IOException {
 		final TestCase[] result;
-		try (InputStream in = classLoader.getResourceAsStream(resourceName)) {
+		try (InputStream in = Files.newInputStream(path)) {
+			String resourceName = path.toString();
 			if (resourceName.endsWith(".yaml")) {
 				result = YAML_MAPPER.readValue(in, TestCase[].class);
 			} else if (resourceName.endsWith(".json")) {
@@ -103,31 +101,29 @@ public class JsonQueryTest {
 		return Arrays.asList(result);
 	}
 
-	private static List<TestCase> loadTestCasesDirectory(final ClassLoader classLoader, final String directory, final boolean failing) throws Throwable {
+	private static List<TestCase> loadTestCasesDirectory(final String directory, final boolean failing) throws IOException {
 		final List<TestCase> testCases = new ArrayList<>();
-		final ClassPath classPath = ClassPath.from(classLoader);
-		for (final ResourceInfo resource : classPath.getResources()) {
-			final String name = resource.getResourceName();
-			if (!name.startsWith(directory))
-				continue;
-			if (!name.endsWith(".json") && !name.endsWith(".yaml"))
-				continue;
-			try {
-				testCases.addAll(loadTestCases(classLoader, name, failing));
-			} catch (final Throwable e) {
-				throw new RuntimeException("Failed to load " + name, e);
+		ClassLoaderUtils.walk(directory, (path, relativePath) -> {
+			if (Files.isDirectory(path)) {
+				return;
 			}
-		}
+			String name = relativePath.toString();
+			if (name.endsWith(".json") || name.endsWith(".yaml")) {
+				try {
+					testCases.addAll(loadTestCases(path, failing));
+				} catch (final Throwable e) {
+					throw new RuntimeException("Failed to load " + relativePath, e);
+				}
+			}
+		});
 		return testCases;
 	}
 
-	static Stream<String> defaultTestCases() throws Throwable {
-		final ClassLoader classLoader = JsonQueryTest.class.getClassLoader();
-
+	static Stream<String> defaultTestCases() throws IOException {
 		final List<TestCase> testCases = new ArrayList<>();
-		testCases.addAll(loadTestCases(classLoader, "jq-test-extra-ok.json", false));
-		testCases.addAll(loadTestCasesDirectory(classLoader, "tests", false));
-		testCases.addAll(loadTestCasesDirectory(classLoader, "failing_tests", true));
+		testCases.addAll(loadTestCases(ClassLoaderUtils.resolve("jq-test-extra-ok.json"), false));
+		testCases.addAll(loadTestCasesDirectory("tests", false));
+		testCases.addAll(loadTestCasesDirectory("failing_tests", true));
 
 		return testCases.stream().map(a -> {
 			try {

@@ -1,0 +1,29 @@
+[
+	{
+		"name": "net.thisptr.jackson.jq.JsonQueryTest$TestCase",
+		"allDeclaredFields": true,
+		"queryAllDeclaredMethods": true,
+		"queryAllDeclaredConstructors": true,
+		"methods": [
+			{
+				"name": "<init>",
+				"parameterTypes": []
+			}
+		],
+		"condition": {
+			"typeReachable": "net.thisptr.jackson.jq.JsonQueryTest"
+		}
+	},
+	{
+		"name": "com.fasterxml.jackson.databind.ser.std.ToStringSerializer",
+		"methods": [
+			{
+				"name": "<init>",
+				"parameterTypes": []
+			}
+		],
+		"condition": {
+			"typeReachable": "net.thisptr.jackson.jq.JsonQueryTest"
+		}
+	}
+]

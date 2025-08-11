@@ -3,36 +3,64 @@ package net.thisptr.jackson.jq.module.loaders;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.NullNode;
-
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import net.thisptr.jackson.jq.ClassLoaderUtils;
 import net.thisptr.jackson.jq.JsonQuery;
 import net.thisptr.jackson.jq.Scope;
 import net.thisptr.jackson.jq.Versions;
 import net.thisptr.jackson.jq.module.ModuleLoader;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FileSystemModuleLoaderTest {
+	private static final Logger log = LoggerFactory.getLogger(FileSystemModuleLoaderTest.class);
+
 	private Scope rootScope;
 
+	@TempDir
+	private Path tempDir;
+
 	@BeforeEach
-	public void beforeEach() throws URISyntaxException {
+	public void beforeEach() throws IOException {
 		rootScope = Scope.newEmptyScope();
 
-		final Path searchPath = Paths.get(FileSystemModuleLoaderTest.class.getClassLoader().getResource("classpath_modules").toURI());
-		final ModuleLoader moduleLoader = new FileSystemModuleLoader(rootScope, Versions.JQ_1_6, searchPath);
+		final ModuleLoader moduleLoader = setupModuleLoader(tempDir);
 
 		rootScope.setModuleLoader(moduleLoader);
+	}
+
+	/**
+	 * Copy modules from classpath to temporary directory.
+	 * <p>
+	 *	This is required for native image as the module loader reads from an absolute directory,
+	 *	while in native image we get test resources in classpath referenced by resource:/[resource-uri]
+	 * </p>
+	 */
+	private ModuleLoader setupModuleLoader(Path tempDir) throws IOException {
+		ClassLoaderUtils.walk("classpath_modules", (src, relativePath) -> {
+			try {
+				Path dest = tempDir.resolve(relativePath.toString());
+				if (Files.isDirectory(src)) {
+					Files.createDirectories(dest);
+				} else {
+					Files.copy(src, dest);
+				}
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		});
+		return new FileSystemModuleLoader(rootScope, Versions.JQ_1_6, tempDir);
 	}
 
 	@Test
