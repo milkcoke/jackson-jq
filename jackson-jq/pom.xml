@@ -37,9 +37,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.fusesource.leveldbjni</groupId>
-			<artifactId>leveldbjni-all</artifactId>
-			<version>1.8</version>
+			<groupId>org.rocksdb</groupId>
+			<artifactId>rocksdbjni</artifactId>
+			<version>7.10.2</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
