@@ -1,7 +1,6 @@
 package net.thisptr.jackson.jq;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assumptions.assumeThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -32,6 +31,7 @@ import net.thisptr.jackson.jq.test.evaluator.Evaluator;
 import net.thisptr.jackson.jq.test.evaluator.Evaluator.Result;
 import net.thisptr.jackson.jq.test.evaluator.TrueJqEvaluator;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -161,10 +161,14 @@ public class JsonQueryTest {
 
 		if (!tc.ignoreTrueJqBehavior && hasJqCache.computeIfAbsent(version, v -> TrueJqEvaluator.hasJq(v))) {
 			final Result result = cachedJqEvaluator.evaluate(tc.q, tc.in, version, 2000L);
-			assumeThat(result.error).as("%s", command).isNull();
-			assumeThat(tc.out).as("%s", command)
+			try {
+                assertThat(result.error).as("%s", command).isNull();
+				assertThat(tc.out).as("%s", command)
 					.usingElementComparator(comparator)
 					.isEqualTo(result.values);
+			} catch (AssertionError e) {
+				Assumptions.abort(String.format("Assumption failed: %s %s", command, e));
+			}
 		}
 
 		boolean failed = false;
@@ -202,7 +206,7 @@ public class JsonQueryTest {
 			assertThat(failed).describedAs("The test case is marked as failing but completed successfully").isTrue();
 	}
 
-	@ParameterizedTest
+    @ParameterizedTest
 	@MethodSource("defaultTestCases")
 	public void test(final String tcText) throws Throwable {
 		final TestCase tc = JSON_MAPPER.readValue(tcText, TestCase.class);
