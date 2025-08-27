@@ -90,6 +90,15 @@ public abstract class MathFunction implements Function {
 	}
 
 	@AutoService(Function.class)
+	@BuiltinFunction("ceil/0")
+	public static class CeilFunction extends MathFunction {
+		@Override
+		protected double f(double f) {
+			return Math.ceil(f);
+		}
+	}
+
+	@AutoService(Function.class)
 	@BuiltinFunction(value = "round/0", version = "[1.6, )")
 	public static class RoundFunction extends MathFunction {
 		@Override
