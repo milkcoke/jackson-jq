@@ -4,7 +4,7 @@
 	<groupId>net.thisptr</groupId>
 	<artifactId>jackson-jq-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>1.5.0</version>
+	<version>1.6.0</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>jq for Jackson JSON Processor</description>
 	<url>https://github.com/eiiches/jackson-jq</url>
@@ -28,7 +28,7 @@
 		<connection>scm:git:git@github.com:eiiches/jackson-jq.git</connection>
 		<developerConnection>scm:git:git@github.com:eiiches/jackson-jq.git</developerConnection>
 		<url>git@github.com:eiiches/jackson-jq.git</url>
-		<tag>1.5.0</tag>
+		<tag>1.6.0</tag>
 	</scm>
 
 	<modules>
@@ -205,7 +205,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>3.11.2</version>
+					<version>3.11.3</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
