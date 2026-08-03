@@ -808,7 +808,12 @@ Expression ObjectConstruction():
 		ObjectField(obj)
 		(
 			<COMMA>
-			ObjectField(obj)
+			(
+				ObjectField(obj)
+				|
+				<CLOSE_BRACE>
+				{ return obj; }
+			)
 		)*
 	)?
 	<CLOSE_BRACE>
