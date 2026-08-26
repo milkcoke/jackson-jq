@@ -8,9 +8,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.ser.std.ToStringSerializer;
 import tools.jackson.dataformat.yaml.YAMLMapper;
 import java.io.IOException;
@@ -37,8 +37,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 public class JsonQueryTest {
-	private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
-	private static final ObjectMapper YAML_MAPPER = new YAMLMapper();
+	private static final JsonMapper JSON_MAPPER  = JsonMapper.builder().build();
+	private static final YAMLMapper YAML_MAPPER = YAMLMapper.builder().build();
 
 	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class TestCase {
@@ -200,7 +200,7 @@ public class JsonQueryTest {
 			assertThat(failed).describedAs("The test case is marked as failing but completed successfully").isTrue();
 	}
 
-    @ParameterizedTest
+	@ParameterizedTest
 	@MethodSource("defaultTestCases")
 	public void test(final String tcText) throws Throwable {
 		final TestCase tc = JSON_MAPPER.readValue(tcText, TestCase.class);
