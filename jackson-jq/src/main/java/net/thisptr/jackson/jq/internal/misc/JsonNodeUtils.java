@@ -54,26 +54,17 @@ public class JsonNodeUtils {
 	public static String typeOf(final JsonNode in) {
 		if (in == null)
 			return "null";
-		switch (in.getNodeType()) {
-			case ARRAY:
-				return "array";
-			case BINARY:
-				return "string";
-			case BOOLEAN:
-				return "boolean";
-			case MISSING:
-				return "null";
-			case NULL:
-				return "null";
-			case NUMBER:
-				return "number";
-			case OBJECT:
-				return "object";
-			case STRING:
-				return "string";
-			default:
-				throw new IllegalArgumentException("Unknown JsonNodeType: " + in.getNodeType());
-		}
+    return switch (in.getNodeType()) {
+      case ARRAY -> "array";
+      case BINARY -> "string";
+      case BOOLEAN -> "boolean";
+      case MISSING -> "null";
+      case NULL -> "null";
+      case NUMBER -> "number";
+      case OBJECT -> "object";
+      case STRING -> "string";
+      default -> throw new IllegalArgumentException("Unknown JsonNodeType: " + in.getNodeType());
+    };
 	}
 
 	public static JsonNode nullToNullNode(final JsonNode value) {
