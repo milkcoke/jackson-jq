@@ -20,11 +20,8 @@ import net.thisptr.jackson.jq.module.ModuleLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class FileSystemModuleLoaderTest {
-	private static final Logger log = LoggerFactory.getLogger(FileSystemModuleLoaderTest.class);
 
 	private Scope rootScope;
 
@@ -64,7 +61,7 @@ public class FileSystemModuleLoaderTest {
 	}
 
 	@Test
-	public void testSimple() throws Exception {
+	public void testSimple() {
 		final JsonQuery expr = JsonQuery.compile("import \"simple\" as simple; simple::one", Versions.JQ_1_6);
 		final List<JsonNode> actual = new ArrayList<>();
 		expr.apply(rootScope, NullNode.getInstance(), actual::add);
@@ -72,7 +69,7 @@ public class FileSystemModuleLoaderTest {
 	}
 
 	@Test
-	public void testRecursiveImports() throws Exception {
+	public void testRecursiveImports() {
 		assertThatThrownBy(() -> {
 			final JsonQuery expr = JsonQuery.compile("import \"recursive_imports/a\" as a; a::one", Versions.JQ_1_6);
 			expr.apply(rootScope, NullNode.getInstance(), (value) -> {});
@@ -80,7 +77,7 @@ public class FileSystemModuleLoaderTest {
 	}
 
 	@Test
-	public void testSearchPathOverrides() throws Exception {
+	public void testSearchPathOverrides() {
 		final JsonQuery expr = JsonQuery.compile("import \"search_path_overrides/a\" as a; a::two", Versions.JQ_1_6);
 		final List<JsonNode> actual = new ArrayList<>();
 		expr.apply(rootScope, NullNode.getInstance(), actual::add);
@@ -88,7 +85,7 @@ public class FileSystemModuleLoaderTest {
 	}
 
 	@Test
-	public void testRepeatedPathComponents() throws Exception {
+	public void testRepeatedPathComponents() {
 		final JsonQuery expr = JsonQuery.compile("import \"repeated_path_components\" as a; a::one", Versions.JQ_1_6);
 		final List<JsonNode> actual = new ArrayList<>();
 		expr.apply(rootScope, NullNode.getInstance(), actual::add);
@@ -101,7 +98,7 @@ public class FileSystemModuleLoaderTest {
 	}
 
 	@Test
-	public void testDataImports() throws Exception {
+	public void testDataImports() {
 		final JsonQuery expr = JsonQuery.compile("import \"data_imports/a\" as $a; $a::a[]", Versions.JQ_1_6);
 		final List<JsonNode> actual = new ArrayList<>();
 		expr.apply(rootScope, NullNode.getInstance(), actual::add);
@@ -109,7 +106,7 @@ public class FileSystemModuleLoaderTest {
 	}
 
 	@Test
-	public void testBrokenDataImports() throws Exception {
+	public void testBrokenDataImports() {
 		assertThatThrownBy(() -> {
 			final JsonQuery expr = JsonQuery.compile("import \"broken_data_imports/a\" as $a; $a::a", Versions.JQ_1_6);
 			expr.apply(rootScope, NullNode.getInstance(), (value) -> {});
@@ -117,7 +114,7 @@ public class FileSystemModuleLoaderTest {
 	}
 
 	@Test
-	public void testModuleNotFound() throws Exception {
+	public void testModuleNotFound() {
 		assertThatThrownBy(() -> {
 			final JsonQuery expr = JsonQuery.compile("import \"module_not_exist\" as a; a::one", Versions.JQ_1_6);
 			expr.apply(rootScope, NullNode.getInstance(), (value) -> {});
@@ -130,7 +127,7 @@ public class FileSystemModuleLoaderTest {
 	}
 
 	@Test
-	public void testIllegalSearchPathOverrides() throws Exception {
+	public void testIllegalSearchPathOverrides() {
 		assertThatThrownBy(() -> {
 			final JsonQuery expr = JsonQuery.compile("import \"illegal_search_path_overrides\" as a; a::one", Versions.JQ_1_6);
 			expr.apply(rootScope, NullNode.getInstance(), (value) -> {});
@@ -138,7 +135,7 @@ public class FileSystemModuleLoaderTest {
 	}
 
 	@Test
-	public void testImportWithAbsolutePath() throws Exception {
+	public void testImportWithAbsolutePath() {
 		assertThatThrownBy(() -> {
 			final JsonQuery expr = JsonQuery.compile("import \"/foo\" as foo; foo::foo", Versions.JQ_1_6);
 			expr.apply(rootScope, NullNode.getInstance(), (value) -> {});
@@ -146,7 +143,7 @@ public class FileSystemModuleLoaderTest {
 	}
 
 	@Test
-	public void testDirectoryTraversal() throws Exception {
+	public void testDirectoryTraversal() {
 		assertThatThrownBy(() -> {
 			final JsonQuery expr = JsonQuery.compile("import \"../foo\" as foo; foo::foo", Versions.JQ_1_6);
 			expr.apply(rootScope, NullNode.getInstance(), (value) -> {});

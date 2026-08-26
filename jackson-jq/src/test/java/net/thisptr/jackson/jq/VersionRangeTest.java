@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 public class VersionRangeTest {
 
 	@Test
-	void testMaxBounds() throws Exception {
+	void testMaxBounds() {
 		assertTrue(VersionRange.valueOf("[1.3, 1.5]").contains(Version.valueOf("1.5")));
 		assertFalse(VersionRange.valueOf("[1.3, 1.5]").contains(Version.valueOf("1.6")));
 		assertTrue(VersionRange.valueOf("[1.3, 1.5)").contains(Version.valueOf("1.4")));
@@ -21,7 +21,7 @@ public class VersionRangeTest {
 	}
 
 	@Test
-	void testMinBounds() throws Exception {
+	void testMinBounds() {
 		assertFalse(VersionRange.valueOf("[1.3, 1.5]").contains(Version.valueOf("1.2")));
 		assertTrue(VersionRange.valueOf("[1.3, 1.5]").contains(Version.valueOf("1.3")));
 		assertTrue(VersionRange.valueOf("[1.3, 1.5]").contains(Version.valueOf("1.4")));

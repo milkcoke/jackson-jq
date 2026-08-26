@@ -65,7 +65,7 @@ public class RandomTest {
 	private static final ObjectMapper MAPPER = new ObjectMapper();
 	private static final Version VERSION = Versions.JQ_1_5;
 
-	private static Map<Version, Set<String>> EXCLUDED_FUNCTIONS = new HashMap<>();
+	private static final Map<Version, Set<String>> EXCLUDED_FUNCTIONS = new HashMap<>();
 	static {
 		EXCLUDED_FUNCTIONS.computeIfAbsent(Versions.JQ_1_5, k -> {
 			return new HashSet<>(Arrays.asList(new String[] {

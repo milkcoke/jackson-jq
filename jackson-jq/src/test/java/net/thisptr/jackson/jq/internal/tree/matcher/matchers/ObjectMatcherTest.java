@@ -21,7 +21,7 @@ import net.thisptr.jackson.jq.internal.misc.Pair;
 public class ObjectMatcherTest {
 
 	@Test
-	void test1() throws Exception {
+	void test1() {
 		final JsonNode in = new ObjectMapper().readTree("{\"outer\":{\"a\": 1, \"b\": 2}, \"c\": 3}");
 		final ObjectMatcher matcher = new ObjectMatcher(Arrays.asList(
 				new ObjectMatcher.FieldMatcher(false, ExpressionParser.compile("\"outer\"", Versions.JQ_1_6), new ObjectMatcher(Arrays.asList(
@@ -41,7 +41,7 @@ public class ObjectMatcherTest {
 	}
 
 	@Test
-	void test2() throws Exception {
+	void test2() {
 		final JsonNode in = new ObjectMapper().readTree("{\"outer\":{\"a\": 1}, \"b\": 2, \"c\": 3}");
 		final ObjectMatcher matcher = new ObjectMatcher(Arrays.asList(
 				new ObjectMatcher.FieldMatcher(false, ExpressionParser.compile("\"outer\"", Versions.JQ_1_6), new ObjectMatcher(Arrays.asList(
