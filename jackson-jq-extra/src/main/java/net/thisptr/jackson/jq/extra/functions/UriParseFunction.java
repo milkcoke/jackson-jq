@@ -3,6 +3,7 @@ package net.thisptr.jackson.jq.extra.functions;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -101,8 +102,8 @@ public class UriParseFunction implements Function {
 			final String valueEncoded = tuple[1];
 
 			try {
-				final String key = URLDecoder.decode(keyEncoded, "UTF-8");
-				final String value = URLDecoder.decode(valueEncoded, "UTF-8");
+				final String key = URLDecoder.decode(keyEncoded, StandardCharsets.UTF_8);
+				final String value = URLDecoder.decode(valueEncoded, StandardCharsets.UTF_8);
 				List<String> arr = result.get(key);
 				if (arr == null) {
 					arr = new ArrayList<>(1);
