@@ -153,7 +153,7 @@ public class JsonQueryTest {
 
 		final Comparator<JsonNode> comparator = new JsonNodeComparatorForTests(!tc.ignoreFieldOrder, tc.numericalErrors);
 
-		if (!tc.ignoreTrueJqBehavior && hasJqCache.computeIfAbsent(version, v -> TrueJqEvaluator.hasJq(v))) {
+		if (!tc.ignoreTrueJqBehavior && hasJqCache.computeIfAbsent(version, TrueJqEvaluator::hasJq)) {
 			final Result result = cachedJqEvaluator.evaluate(tc.q, tc.in, version, 2000L);
 			try {
                 assertThat(result.error).as("%s", command).isNull();
