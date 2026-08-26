@@ -2,6 +2,7 @@ package net.thisptr.jackson.jq.extra.functions;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import tools.jackson.databind.JsonNode;
@@ -26,10 +27,6 @@ public class UriDecodeFunction implements Function {
 	public void apply(final Scope scope, final List<Expression> args, final JsonNode in, final Path ipath, final PathOutput output, final Version version) throws JsonQueryException {
 		Preconditions.checkInputType("urldecode", in, JsonNodeType.STRING);
 
-		try {
-			output.emit(new StringNode(URLDecoder.decode(in.asString(), "UTF-8")), null);
-		} catch (UnsupportedEncodingException e) {
-			throw new JsonQueryException(e);
-		}
-	}
+    output.emit(new StringNode(URLDecoder.decode(in.asString(), StandardCharsets.UTF_8)), null);
+  }
 }
