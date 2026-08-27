@@ -104,12 +104,8 @@ public class UriParseFunction implements Function {
 			try {
 				final String key = URLDecoder.decode(keyEncoded, StandardCharsets.UTF_8);
 				final String value = URLDecoder.decode(valueEncoded, StandardCharsets.UTF_8);
-				List<String> arr = result.get(key);
-				if (arr == null) {
-					arr = new ArrayList<>(1);
-					result.put(key, arr);
-				}
-				arr.add(value);
+        List<String> arr = result.computeIfAbsent(key, k -> new ArrayList<>(1));
+        arr.add(value);
 			} catch (Exception e) {
 				continue;
 			}
