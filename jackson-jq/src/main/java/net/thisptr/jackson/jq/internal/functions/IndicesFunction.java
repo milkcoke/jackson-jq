@@ -52,7 +52,7 @@ public class IndicesFunction implements Function {
 					result.add(index);
 			}
 		} else if (needle.isArray() && haystack.isArray()) {
-			if (needle.size() != 0) {
+			if (!needle.isEmpty()) {
 				shift: for (int i = 0; i < haystack.size() - needle.size() + 1; ++i) {
 					for (int j = 0; j < needle.size(); ++j)
 						if (comparator.compare(haystack.get(i + j), needle.get(j)) != 0)

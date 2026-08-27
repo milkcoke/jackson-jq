@@ -57,7 +57,7 @@ public class ArrayIndexOfPath implements Path {
 		final JsonNodeComparator comparator = JsonNodeComparator.getInstance();
 		final ArrayNode out = MAPPER.createArrayNode();
 
-		if (subseq.size() != 0) {
+		if (!subseq.isEmpty()) {
 			shift: for (int i = 0; i < seq.size() - subseq.size() + 1; ++i) {
 				for (int j = 0; j < subseq.size(); ++j)
 					if (comparator.compare(seq.get(i + j), subseq.get(j)) != 0)
