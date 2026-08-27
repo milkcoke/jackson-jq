@@ -47,30 +47,30 @@ public class Main {
 			.build();
 
 	private static final Option OPT_COMPACT = Option.builder("c")
-			.longOpt("compact")
-			.desc("compact instead of pretty-printed output")
-			.build();
+      .longOpt("compact")
+      .desc("compact instead of pretty-printed output")
+			.get();
 
 	private static final Option OPT_RAW_OUTPUT = Option.builder("r")
 			.longOpt("raw-output")
 			.desc("output raw strings, not JSON texts")
-			.build();
+			.get();
 
 	private static final Option OPT_NULL_INPUT = Option.builder("n")
 			.longOpt("null-input")
 			.desc("use `null` as the single input value")
-			.build();
+			.get();
 
 	private static final Option OPT_VERSION = Option.builder()
 			.longOpt("jq")
 			.desc("specify jq version")
 			.numberOfArgs(1)
-			.build();
+			.get();
 
 	private static final Option OPT_HELP = Option.builder("h")
 			.longOpt("help")
 			.desc("print this message")
-			.build();
+			.get();
 
 	public static void main(String[] args) throws IOException, ParseException {
 		final Options options = new Options();
