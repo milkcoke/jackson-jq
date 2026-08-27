@@ -12,11 +12,11 @@ import java.util.List;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-
+import org.apache.commons.cli.help.AbstractHelpFormatter;
+import org.apache.commons.cli.help.HelpFormatter;
 import tools.jackson.core.JsonParser;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
@@ -102,8 +102,11 @@ public class Main {
 		}
 
 		if (rest.isEmpty() || command.hasOption(OPT_HELP.getOpt())) {
-			final HelpFormatter help = new HelpFormatter();
-			help.printHelp("jackson-jq [OPTIONS...] QUERY", options, false);
+			final HelpFormatter help = HelpFormatter.builder()
+					.setShowSince(false)
+					.setComparator(AbstractHelpFormatter.DEFAULT_COMPARATOR)
+					.get();
+			help.printHelp("jackson-jq [OPTIONS...] QUERY", null, help.sort(options), null, false);
 			System.exit(0);
 		}
 
