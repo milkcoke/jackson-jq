@@ -32,7 +32,6 @@ public class JsonNodeComparatorBenchmark {
 
 	public enum Impl {
 		hashMap(JsonNodeComparator.getInstance()),
-		enumMap(EnumMapJsonNodeComparator.getInstance()),
 		intArray(IntArrayJsonNodeComparator.getInstance());
 
 		final Comparator<JsonNode> comparator;

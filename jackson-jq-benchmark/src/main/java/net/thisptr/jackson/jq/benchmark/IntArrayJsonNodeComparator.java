@@ -1,0 +1,133 @@
+package net.thisptr.jackson.jq.benchmark;
+
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeType;
+
+import net.thisptr.jackson.jq.internal.misc.Lists;
+
+@SuppressWarnings("serial")
+public class IntArrayJsonNodeComparator implements Comparator<JsonNode>, Serializable {
+	private static final IntArrayJsonNodeComparator defaultInstance = new IntArrayJsonNodeComparator();
+
+	public static IntArrayJsonNodeComparator getInstance() {
+		return defaultInstance;
+	}
+
+	private static final JsonNodeType[][] ordering = new JsonNodeType[][] {
+			new JsonNodeType[] { JsonNodeType.NULL, JsonNodeType.MISSING },
+			new JsonNodeType[] { JsonNodeType.BOOLEAN },
+			new JsonNodeType[] { JsonNodeType.NUMBER },
+			new JsonNodeType[] { JsonNodeType.STRING, JsonNodeType.BINARY },
+			new JsonNodeType[] { JsonNodeType.ARRAY },
+			new JsonNodeType[] { JsonNodeType.OBJECT },
+	};
+
+	private static final int UNSUPPORTED_ORDER_VALUE = -1;
+
+	private static final int[] orderValues = new int[JsonNodeType.values().length];
+	static {
+		Arrays.fill(orderValues, UNSUPPORTED_ORDER_VALUE);
+		for (int i = 0; i < ordering.length; i++)
+			for (final JsonNodeType type : ordering[i])
+				orderValues[type.ordinal()] = i;
+	}
+
+	private static int orderValue(final JsonNode node) {
+		if (node == null)
+			return 0;
+		return orderValue(node.getNodeType());
+	}
+
+	private static int orderValue(final JsonNodeType type) {
+		final int value = orderValues[type.ordinal()];
+		if (value == UNSUPPORTED_ORDER_VALUE)
+			throw new IllegalArgumentException("Unknown JsonNodeType: " + type);
+		return value;
+	}
+
+	protected int compareNumberNode(final JsonNode o1, final JsonNode o2) {
+		final double a = o1.asDouble();
+		final double b = o2.asDouble();
+		if (Double.isNaN(a))
+			return -1;
+		if (Double.isNaN(b))
+			return 1;
+		return Double.compare(a, b);
+	}
+
+	protected int compareArrayNode(final JsonNode o1, final JsonNode o2) {
+		final int s1 = o1.size();
+		final int s2 = o2.size();
+		final int s = Math.min(s1, s2);
+		for (int i = 0; i < s; ++i) {
+			final int rr = compare(o1.get(i), o2.get(i));
+			if (rr != 0)
+				return rr;
+		}
+		return Integer.compare(s1, s2);
+	}
+
+	protected int compareObjectNode(final JsonNode o1, final JsonNode o2) {
+		final List<String> names1 = Lists.newArrayList(o1.fieldNames());
+		final List<String> names2 = Lists.newArrayList(o2.fieldNames());
+
+		// compare by keys
+		Collections.sort(names1);
+		Collections.sort(names2);
+		final int s = Math.min(names1.size(), names2.size());
+		for (int i = 0; i < s; ++i) {
+			final int rr = names1.get(i).compareTo(names2.get(i));
+			if (rr != 0)
+				return rr;
+		}
+		final int rr = Integer.compare(names1.size(), names2.size());
+		if (rr != 0)
+			return rr;
+
+		// compare by values (keys are sorted alphabetically)
+		for (final String name : names1) {
+			final int rrr = compare(o1.get(name), o2.get(name));
+			if (rrr != 0)
+				return rrr;
+		}
+
+		return 0;
+	}
+
+	@Override
+	public int compare(final JsonNode o1, final JsonNode o2) {
+		final int r = orderValue(o1) - orderValue(o2);
+		if (r != 0)
+			return r;
+
+		final JsonNodeType type = o1 != null ? o1.getNodeType() : null;
+		if (type == null || type == JsonNodeType.MISSING || type == JsonNodeType.NULL)
+			return 0;
+
+		if (type == JsonNodeType.BOOLEAN)
+			return Boolean.compare(o1.asBoolean(), o2.asBoolean());
+
+		if (type == JsonNodeType.NUMBER) {
+			return compareNumberNode(o1, o2);
+		}
+
+		if (type == JsonNodeType.STRING || type == JsonNodeType.BINARY)
+			return o1.asText().compareTo(o2.asText());
+
+		if (type == JsonNodeType.ARRAY) {
+			return compareArrayNode(o1, o2);
+		}
+
+		if (type == JsonNodeType.OBJECT) {
+			return compareObjectNode(o1, o2);
+		}
+
+		throw new IllegalArgumentException("Unknown JsonNodeType: " + type);
+	}
+}
